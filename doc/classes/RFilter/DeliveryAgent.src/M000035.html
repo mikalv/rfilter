@@ -1,0 +1,29 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>log (RFilter::DeliveryAgent)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/delivery_agent.rb, line 219</span>
+    <span class="kw">def</span> log(level, str)
+      <span class="kw">if</span> level &lt;= 0 <span class="kw">and</span> @logfile.nil?
+        raise LoggingError, &quot;failed to log high priority message: #{str}&quot;
+      <span class="kw">end</span>
+      <span class="kw">return</span> <span class="kw">if</span> @logfile.nil? <span class="kw">or</span> level &gt; @logging_level
+      <span class="kw">begin</span>
+        @logfile.flock(File::LOCK_EX)
+        @logfile.print(Time.now.strftime(<span class="str">&quot;%Y/%m/%d %H:%M:%S &quot;</span>))
+        @logfile.print(sprintf(<span class="str">&quot;%05d: &quot;</span>, Process.pid))
+        @logfile.puts(str)
+        @logfile.flush
+        @logfile.flock(File::LOCK_UN)
+      <span class="kw">rescue</span>
+        <span class="cmt"># FIXME: this isn't tested</span>
+        raise LoggingError.new(&quot;failed to log message: #{str}&quot;, $!)
+      <span class="kw">end</span>
+    <span class="kw">end</span></pre>
+</body>
+</html>

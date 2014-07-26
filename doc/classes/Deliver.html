@@ -1,0 +1,159 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Deliver</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel=StyleSheet href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript" language="JavaScript">
+  <!--
+  function popCode(url) {
+    window.open(url, "Code", 
+          "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  //-->
+  </script>
+</head>
+
+<body bgcolor="white">
+
+<table summary="Information on class" width="100%" border="0" cellspacing="0">
+ <tr class="title-row">
+ <td class="big-title-font">
+   <sup><font color="aqua">Class</font></sup> Deliver
+ </td>
+ <td align="right">
+   <table summary="layout" cellspacing="0" cellpadding="2">
+     <tr valign="top">
+      <td class="small-title-font">In:</td>
+      <td class="small-title-font">
+        <a href="../files/bin/experimental-filter_rb.html" class="aqua">
+bin/experimental-filter.rb
+         </a>
+<br />
+        <a href="../files/bin/rdeliver_rb.html" class="aqua">
+bin/rdeliver.rb
+         </a>
+<br />
+      </td>
+     </tr>
+     <tr>
+      <td class="small-title-font">Parent:</td>
+      <td class="small-title-font">
+Object
+      </td>
+     </tr>
+   </table>
+  </td>
+  </tr>
+</table>
+  <!-- banner header -->
+
+
+
+<div class="description"><p>
+The <a href="Deliver.html">Deliver</a> class used by the <a
+href="../files/bin/rdeliver_rb.html">bin/rdeliver.rb</a> script to provide
+a place for the user&#8217;s delivery script to run. The user&#8217;s
+delivery script executes in the context of this class, so methods defined
+with <tt>def</tt> do not pollute the global namespace. The user is expected
+to define a <a href="Deliver.html#M000015">#main</a> method that will be
+called to deliver the mail.
+</p>
+<p>
+See also <a href="../files/bin/rdeliver_rb.html">bin/rdeliver.rb</a>
+</p>
+</div>
+
+
+<table summary="Methods" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Methods</td></tr>
+</table>
+<div class="name-list">
+<a href="#M000012">agent</a>&nbsp; &nbsp;
+<a href="#M000014">agent</a>&nbsp; &nbsp;
+<a href="#M000013">main</a>&nbsp; &nbsp;
+<a href="#M000015">main</a>&nbsp; &nbsp;
+</div>
+
+
+
+
+
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Instance methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000012"></a>
+<a href="Deliver.src/M000012.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000012.html');return false;">
+<b>agent</b>()
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Return the <a href="RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+object for the current message. This is all you need to retrieve, modify,
+and deliver the message.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000013"></a>
+<a href="Deliver.src/M000013.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000013.html');return false;">
+<b>main</b>()
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+This method is called by bin/filter.rb after the <a
+href="Deliver.html">Deliver</a> object is instantiated. A default
+implementation that merely defers the delivery is provided, but the user is
+expected to replace this with a version that delivers the mail to the
+proper location.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000014"></a>
+<a href="Deliver.src/M000014.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000014.html');return false;">
+<b>agent</b>()
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Return the <a href="RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+object for the current message. This is all you need to retrieve, modify,
+and deliver the message.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000015"></a>
+<a href="Deliver.src/M000015.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000015.html');return false;">
+<b>main</b>()
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+This method is called by <a
+href="../files/bin/rdeliver_rb.html">bin/rdeliver.rb</a> after the <a
+href="Deliver.html">Deliver</a> object is instantiated. A default
+implementation that merely defers the delivery is provided, but the user is
+expected to replace this with a version that delivers the mail to the
+proper location.
+</p>
+</div>
+
+</body>
+</html>

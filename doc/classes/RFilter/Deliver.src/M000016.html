@@ -1,0 +1,59 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>deliver_mbox (RFilter::Deliver)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/deliver.rb, line 63</span>
+    <span class="kw">def</span> deliver_mbox(filename, message)
+      <span class="kw">return</span> filename <span class="kw">if</span> filename == <span class="str">'/dev/null'</span>
+      File.open(filename,
+                File::APPEND|File::WRONLY|File::CREAT|SYNC_IF_NO_FSYNC,
+                0600) { |f|
+        max = 5
+        max.times { |i|
+          <span class="kw">break</span> <span class="kw">if</span> f.flock(File::LOCK_EX | File::LOCK_NB)
+          raise LockingError, <span class="str">&quot;Timeout locking mailbox.&quot;</span> <span class="kw">if</span> i == max - 1
+          sleep(1)
+        }
+        st = f.lstat
+        <span class="kw">unless</span> st.file?
+          raise NotAFile,
+            &quot;Can not deliver to #{filename}, not a regular file.&quot;
+        <span class="kw">end</span>
+        <span class="kw">begin</span>
+          <span class="cmt"># Ignore SIGXFSZ, since we want to get the Errno::EFBIG</span>
+          <span class="cmt"># exception when the file is too big.</span>
+          old_handler = trap(<span class="str">'XFSZ'</span>, <span class="str">'IGNORE'</span>) || <span class="str">'DEFAULT'</span>
+          write_to_mbox(f, message)
+          <span class="kw">begin</span>
+            f.fsync
+          <span class="kw">rescue</span> NameError
+            <span class="cmt"># NameError happens with older versions of Ruby that have</span>
+            <span class="cmt"># no File#fsync</span>
+            f.flush
+          <span class="kw">end</span>
+        <span class="kw">rescue</span> Exception =&gt; e
+          <span class="kw">begin</span>
+            <span class="kw">begin</span>
+              f.flush
+            <span class="kw">rescue</span> Exception
+            <span class="kw">end</span>
+            f.truncate(st.size)
+          <span class="kw">ensure</span>
+            raise e
+          <span class="kw">end</span>
+        <span class="kw">ensure</span>
+          <span class="kw">if</span> old_handler
+            trap(<span class="str">'XFSZ'</span>, old_handler)
+          <span class="kw">end</span>
+        <span class="kw">end</span>
+        f.flock(File::LOCK_UN)
+      }
+      filename
+    <span class="kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,229 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: RFilter::KeyedMailbox</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel=StyleSheet href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript" language="JavaScript">
+  <!--
+  function popCode(url) {
+    window.open(url, "Code", 
+          "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  //-->
+  </script>
+</head>
+
+<body bgcolor="white">
+
+<table summary="Information on class" width="100%" border="0" cellspacing="0">
+ <tr class="title-row">
+ <td class="big-title-font">
+   <sup><font color="aqua">Class</font></sup> RFilter::KeyedMailbox
+ </td>
+ <td align="right">
+   <table summary="layout" cellspacing="0" cellpadding="2">
+     <tr valign="top">
+      <td class="small-title-font">In:</td>
+      <td class="small-title-font">
+        <a href="../../files/lib/rfilter/keyed_mailbox_rb.html" class="aqua">
+lib/rfilter/keyed_mailbox.rb
+         </a>
+<br />
+      </td>
+     </tr>
+     <tr>
+      <td class="small-title-font">Parent:</td>
+      <td class="small-title-font">
+Object
+      </td>
+     </tr>
+   </table>
+  </td>
+  </tr>
+</table>
+  <!-- banner header -->
+
+
+
+<div class="description"><p>
+A <a href="KeyedMailbox.html">KeyedMailbox</a> object implements a message
+mailbox indexed by a unique key string for each message. When a message is
+saved into the store, the message&#8217;s key is returned. Later, the key
+is used to retrieve file name the message is stored in.
+</p>
+<p>
+The message store has the following characteristics:
+</p>
+<ol>
+<li>It is a Maildir, so various mail programs can read the messages directly
+and without adversely affecting the mailbox.
+
+</li>
+<li>The key is very hard to guess.
+
+</li>
+<li>The key is short and can be included in a message subject or in the
+extension of a return address (suitable for mailing list style
+confirmations).
+
+</li>
+</ol>
+</div>
+
+
+<table summary="Methods" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Methods</td></tr>
+</table>
+<div class="name-list">
+<a href="#M000024">delete</a>&nbsp; &nbsp;
+<a href="#M000026">each_key</a>&nbsp; &nbsp;
+<a href="#M000025">expire</a>&nbsp; &nbsp;
+<a href="#M000027">key_mtime</a>&nbsp; &nbsp;
+<a href="#M000021">new</a>&nbsp; &nbsp;
+<a href="#M000028">path</a>&nbsp; &nbsp;
+<a href="#M000023">retrieve</a>&nbsp; &nbsp;
+<a href="#M000022">save</a>&nbsp; &nbsp;
+</div>
+
+
+
+
+<table summary="Included modules" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Included modules</td></tr>
+</table>
+<div class="name-list">
+    <span class="method-name"><a href="Deliver.html">RFilter::Deliver</a></span>
+</div>
+
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Class methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000021"></a>
+<a href="KeyedMailbox.src/M000021.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000021.html');return false;">
+<b>new</b>(path)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Creates a confirmation queue object that manages a confirmation queue in
+directory <tt>path</tt>.
+</p>
+</div>
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Instance methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000022"></a>
+<a href="KeyedMailbox.src/M000022.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000022.html');return false;">
+<b>save</b>(message)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Saves a message into a confirmation queue and returns a string key that can
+be used to retrieve it later. They key is a string of hex digits and
+dashes, suitable for inclusion in a message subject or &quot;VERP&quot;
+return address.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000023"></a>
+<a href="KeyedMailbox.src/M000023.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000023.html');return false;">
+<b>retrieve</b>(key)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Get the file name holding the message associated with <tt>key</tt>, or
+returns nil if the message is missing.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000024"></a>
+<a href="KeyedMailbox.src/M000024.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000024.html');return false;">
+<b>delete</b>(key)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Given a key, delete the message associated with it.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000025"></a>
+<a href="KeyedMailbox.src/M000025.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000025.html');return false;">
+<b>expire</b>(age)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Expire messages in the confirmation queue older than <tt>age</tt> days old.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000026"></a>
+<a href="KeyedMailbox.src/M000026.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000026.html');return false;">
+<b>each_key</b>() {|key| ...}
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Yield each key in the mailbox along with its most recent modification time.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000027"></a>
+<a href="KeyedMailbox.src/M000027.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000027.html');return false;">
+<b>key_mtime</b>(key)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Yield the time a given key was last modified as a Time object or nil if the
+key doesn&#8217;t exist.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000028"></a>
+<a href="KeyedMailbox.src/M000028.html" target="Code" class="methodtitle"
+ onClick="popCode('KeyedMailbox.src/M000028.html');return false;">
+<b>path</b>()
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Return the path of this keyed mailbox (same value passed in <a
+href="AddressTagger.html#M000050">#new</a>).
+</p>
+</div>
+
+</body>
+</html>

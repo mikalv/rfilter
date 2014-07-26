@@ -1,0 +1,39 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>main (bin/experimental-filter.rb)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File bin/experimental-filter.rb, line 164</span>
+<span class="kw">def</span> main
+
+  <span class="cmt"># Read the .rdeliver file, which fills in the Deliver class.</span>
+  $config = <span class="str">'.rdeliver'</span>
+
+  <span class="cmt"># FIXME: make errors logged from this a lot more clear.</span>
+  eval(IO.readlines($config, <span class="kw">nil</span>)[0].untaint,
+       Deliver.module_eval(<span class="str">'binding()'</span>),
+       $config)
+
+  <span class="kw">begin</span>
+    toucher_thread = Thread.start {
+      loop {
+        now = Time.now
+        File.utime(now, now, File.join(<span class="str">&quot;Maildir&quot;</span>, <span class="str">&quot;.filter.lock&quot;</span>))
+        sleep(60)
+      }
+    }
+    loop {
+      process_queue
+      sleep(15)
+    }
+  <span class="kw">ensure</span>
+    Thread::kill(toucher_thread) <span class="kw">if</span> toucher_thread
+    File::delete($lock_file_name)
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+</body>
+</html>

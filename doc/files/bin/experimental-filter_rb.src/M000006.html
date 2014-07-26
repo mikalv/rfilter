@@ -1,0 +1,21 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>wait_for_more (bin/experimental-filter.rb)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File bin/experimental-filter.rb, line 154</span>
+<span class="kw">def</span> wait_for_more(max_minutes)
+  max_seconds = max_minutes * 60
+  GC.start
+  <span class="kw">if</span> sleep(max_seconds + 1) &gt;= max_seconds
+    <span class="cmt"># If we waited this long and there was no more mail, exit to free</span>
+    <span class="cmt"># up the system resources.</span>
+    exit
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+</body>
+</html>

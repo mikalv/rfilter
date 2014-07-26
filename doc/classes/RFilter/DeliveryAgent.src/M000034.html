@@ -1,0 +1,26 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>filter (RFilter::DeliveryAgent)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/delivery_agent.rb, line 199</span>
+    <span class="kw">def</span> filter(*command)
+      log(2, &quot;Action: filter through #{command.inspect}&quot;)
+      msg = <span class="kw">nil</span>
+      status = deliver_filter(@message, *command) { |io|
+        msg = RMail::Parser.new.parse(io)
+      }
+      <span class="kw">if</span> status != 0
+        m = format(<span class="str">&quot;filter failed for command %s (status %s)&quot;</span>,
+                   command.inspect, status.inspect)
+        log(1, <span class="str">&quot;Error: &quot;</span> + m)
+        raise DeliveryCommandFailure.new(m, status)
+      <span class="kw">end</span>
+      @message = msg
+    <span class="kw">end</span></pre>
+</body>
+</html>

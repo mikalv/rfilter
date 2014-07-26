@@ -1,0 +1,33 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>process_queue (bin/experimental-filter.rb)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File bin/experimental-filter.rb, line 132</span>
+<span class="kw">def</span> process_queue
+  files = Dir[File.join($queue, <span class="str">'new'</span>) + <span class="str">'/*'</span>].sort { |a, b|
+    queue_file_time(a) &lt;=&gt; queue_file_time(b)
+  }
+  files.each { |queue_file_name|
+    <span class="kw">begin</span>
+      File.open(queue_file_name) { |queue_file|
+        RFilter::DeliveryAgent.process(queue_file, $log) { |agent|
+          Deliver.new(agent).main
+        }
+      }
+    <span class="kw">rescue</span> RFilter::DeliveryAgent::DeliverySuccess
+      File::unlink(queue_file_name)
+    <span class="kw">rescue</span> RFilter::DeliveryAgent::DeliveryReject
+      <span class="cmt"># FIXME: for now, reject just drops the message on the floor</span>
+      File::unlink(queue_file_name)
+    <span class="kw">rescue</span> RFilter::DeliveryAgent::DeliveryComplete
+      <span class="cmt"># FIXME: truly defer somehow</span>
+    <span class="kw">end</span>
+  }
+<span class="kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,103 @@
+-*- outline -*-
+
+= Bug Fixes
+
+  - Maildir delivery is unsafe.  See new
+    http://cr.yp.to/proto/maildir.html
+
+= Features
+
+  - Mail::Deliver
+
+    - Uniform lock handling in deliver_mbox and deliver_pipe
+
+  - Mail::DeliveryAgent
+
+    - Implement some kind of plugin architecture.  It can be simple,
+      based on requiring files and including them into the Deliver
+      class.  Or perhaps a Deliver::Plugin class to fix namespace
+      issues.
+
+    - filter method: make it work if the command starts printing
+      before it
+      has read the entire message.
+
+    - forward method?
+
+    - pipe method (lockfile attribute?)
+
+    - ignore method (reason attribute?)
+
+    - resend method (call it forward?)
+
+  - Mail::DeliveryAgent#save doen't generate a DeliveryFailure for all
+    possible delivery failures.  Test this.
+
+  - Unknown
+
+    - Implement an auto-responder.
+
+      - Implement sender based pending queues
+
+        The queue lives under a single directory of this structure:
+
+            <dir>/senders/<sender-address>/msgs/<id>
+            <dir>/senders/<sender-address>/meta
+            <dir>/sender-count
+            <dir>/lock
+
+        Access to the entire directory is controlled by an flock on the lock
+        file.  This simplifies other issues.
+
+        The <sender-address> is a sanitized version of the actual sender
+        address.  Every character outside the range of a-zA-Z and @ is HEX
+        encoded.
+
+
+      - Content
+
+        From: field set to the user that received the mail.  This
+        should be configurable.  This should allow for guessing among
+        several (explicitly listed) valid possibilities.
+
+        To: indicates the recipient of the response.
+
+        Date: indicate the date and time at which the response was
+        composed.
+
+        Subject: Auto-Re: (original subject)
+
+        In-Reply-To: included if there was a message-id of the message.
+
+        References: included as well.
+
+        Context should be text/plain only.
+
+        SMTP MAIL FROM: <>
+
+        Auto-Submitted: auto-replied (reason)
+
+      - When responses are sent
+
+        Not when there is an Auto-Submitted: header with value of
+        auto-replied or auto-generated.
+
+        Not when there is a Precidence: bulk or Precidence: list header.
+
+        Not to the same sender within a period of days (7 default).
+
+        When a valid address for the recipient is in the To: Cc: or Bcc:
+              headers.
+
+        When the recipient is owner-*, *-request, "MAILER-DAEMON", etc
+        (see procmail's FROM_DAEMON regexp).
+
+      - Where responses are sent
+
+        To the Return-Path: header only or _maybe_ the From_ field if
+        enabled.
+
+= Minor Features
+
+  - ListDetector -- like Perl's Mail::ListDetector to detect if a
+    message is sent to a mailing list and if so what list.

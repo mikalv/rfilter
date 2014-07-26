@@ -1,0 +1,165 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: rdeliver.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel=StyleSheet href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript" language="JavaScript">
+  <!--
+  function popCode(url) {
+    window.open(url, "Code", 
+          "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  //-->
+  </script>
+</head>
+
+<body bgcolor="white">
+<table summary="Information on file" width="100%">
+ <tr class="title-row">
+ <td><table summary="layout" width="100%"><tr>
+   <td class="big-title-font" colspan="2">rdeliver.rb</td>
+   <td align="right"><table summary="layout" cellspacing="0" cellpadding="2">
+         <tr>
+           <td  class="small-title-font">Path:</td>
+           <td class="small-title-font">bin/rdeliver.rb</td>
+         </tr>
+         <tr>
+           <td class="small-title-font">Modified:</td>
+           <td class="small-title-font">Fri Dec 26 22:21:13 PST 2003</td>
+         </tr>
+        </table>
+    </td></tr></table></td>
+  </tr>
+</table>
+  <!-- banner header -->
+
+
+
+<div class="description"><p>
+This script serves as an example of how you can use the <a
+href="../../classes/RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+class to perform mail delivery. You can also use this script as a fully
+functioning mail filter.
+</p>
+<p>
+This script is a basic mail local delivery agent (DeliveryAgent) that can
+be used in place of procmail, maildrop, etc. in a user&#8217;s .forward or
+.qmail file. The user supplies a delivery script that is written in Ruby,
+which avoids the limitations of the crippled mini-languages so often used
+in other DeliveryAgent programs.
+</p>
+<h3>Usage</h3>
+<p>
+rdeliver is invoked from the command line using:
+</p>
+<pre>
+  % rdeliver &lt;options&gt; [script]
+</pre>
+<p>
+The script argument is optional. If omitted the script will look for a file
+called .rdeliver in the home directory.
+</p>
+<p>
+Options are:
+</p>
+<table>
+<tr><td valign="top"><tt>&#8212;load-path</tt>:</td><td>Prepend the given directory to ruby&#8217;s load path.
+
+</td></tr>
+<tr><td valign="top"><tt>&#8212;log</tt> <em>filename</em>:</td><td>Log to the given <em>filename</em>. If no log is specified, no logging
+occurs.
+
+</td></tr>
+<tr><td valign="top"><tt>&#8212;home</tt> <em>directory</em>:</td><td>Specify the home <em>directory</em>. rdeliver will change to this directory
+before reading and writing any files. The home directory defaults to the
+value of the <tt>HOME</tt> or <tt>LOGDIR</tt> environment variable.
+
+</td></tr>
+</table>
+<h3>Delivery Script</h3>
+<p>
+The delivery script runs in the context of a class called <a
+href="../../classes/Deliver.html">Deliver</a> (in contrast, most ruby
+scripts run in the context of the Object class). So any methods added with
+<tt>def</tt> will be added to the <a
+href="../../classes/Deliver.html">Deliver</a> class.
+</p>
+<p>
+A minimal delivery script would be:
+</p>
+<pre>
+  def main
+    agent.save('inbox')
+  end
+</pre>
+<p>
+This code defines a Deliver#main method that saves the mail into an mbox
+style mailbox.
+</p>
+<p>
+The only API the <a href="../../classes/Deliver.html">Deliver</a> script
+has is the <a href="../../classes/Deliver.html#M000014">#agent</a> method.
+This retrieves the <a
+href="../../classes/RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+object associated with the current message. Using the API of the <a
+href="../../classes/RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+object, you can access and modify the message body and headers, defer or
+reject the message delivery, and deliver into various mailbox formats.
+</p>
+<p>
+See also <a
+href="../../classes/RFilter/DeliveryAgent.html">RFilter::DeliveryAgent</a>
+and <a href="../../classes/Deliver.html">Deliver</a>.
+</p>
+<h3>Installation</h3>
+<p>
+Assuming you have the RubyMail mail classes installed, you typically have
+to put something like this in your .forward file:
+</p>
+<pre>
+   |&quot;/usr/local/bin/rdeliver --log /home/you/.rlog&quot;
+</pre>
+<p>
+This will call rdeliver for each new message you get, and log to
+<tt>/home/you/.rlog</tt>.
+</p>
+<h3>Catastrophic Errors</h3>
+<p>
+The rdeliver script is very careful with errors. If there is any problem,
+it logs the error to the log file you specify. But if you do not specify a
+log file, or the error occurs before the log file is opened, a record of
+the error is placed in a file called CATASTROPHIC_DELIVERY_FAILURE in the
+home directory. If that fails, the error information is printed to the
+standard output in the hopes that it will be part of a bounce message. In
+all cases, the exit code 75 is returned, which tells the MTA to re-try the
+delivery again.
+</p>
+</div>
+
+<table summary="Requires" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Required files</td></tr>
+</table>
+<div class="name-list">
+getoptlong&nbsp; &nbsp;
+rfilter/delivery_agent&nbsp; &nbsp;
+</div>
+
+
+
+
+<table summary="List of classes" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Classes and Modules</td></tr>
+</table>
+<div class="classlist">
+Class <a href="../../classes/Deliver.html" class="link">Deliver</a><br />
+
+</div>
+
+
+
+</body>
+</html>

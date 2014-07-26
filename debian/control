@@ -1,0 +1,38 @@
+Source: rubyfilter
+Section: interpreters
+Priority: optional
+Maintainer: YAEGASHI Takeshi <yaegashi@debian.org>
+Build-Depends-Indep: debhelper (>> 4.0.0), ruby1.8
+Standards-Version: 3.6.2.1
+
+Package: rdeliver
+Architecture: all
+Section: mail
+Depends: ruby, librfilter-ruby1.8
+Suggests: rubyfilter-doc
+Description: A fully functioning mail filter with RubyFilter
+ rdeliver is a basic mail local delivery agent (DeliveryAgent of
+ RubyFilter) that can be used in place of procmail, maildrop, etc. in a
+ user's .forward or .qmail file.
+ .
+ The user supplies a delivery script that is written in Ruby, which
+ avoids the limitations of the crippled mini-languages so often used in
+ other DeliveryAgent programs.
+
+Package: rubyfilter-doc
+Architecture: all
+Description: A mail filtering library for Ruby (documentation)
+ RubyFilter is a framework for filtering mail, possibly modifying it, and
+ delivering it to various mailbox formats.
+ .
+ This package contains an online documentation of RubyFilter.
+
+Package: librfilter-ruby1.8
+Architecture: all
+Depends: librmail-ruby1.8
+Suggests: rubyfilter-doc
+Description: A mail filtering library for Ruby 1.8
+ RubyFilter is a framework for filtering mail, possibly modifying it, and
+ delivering it to various mailbox formats.
+ .
+ This package contains a runtime library for Ruby 1.8.

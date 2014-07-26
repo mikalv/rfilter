@@ -1,0 +1,149 @@
+.TH rdeliver 1 "September 2003"
+.SH NAME
+rdeliver \- Ruby mail filter script
+.SH SYNOPSYS
+.B rdeliver
+<options>
+.RI [ script ]
+.SH DESCRIPTION
+.PP
+This script serves as an example of how you can use the
+.B RFilter::DeliveryAgent
+class to perform mail delivery.
+You can also use this script as a fully functioning mail filter.
+.PP
+This script is a basic mail local delivery agent
+.RB ( DeliveryAgent )
+that can be used in place of procmail, maildrop, etc. in a user's
+.I \&.forward
+or
+.I \&.qmail
+file.  The user supplies a delivery script that
+is written in Ruby, which avoids the limitations of the crippled
+mini\-languages so often used in other
+.B DeliveryAgent
+programs.
+.SH USAGE
+.PP
+.B rdeliver
+is invoked from the command line using:
+.RS
+.sp
+%
+.B rdeliver
+<options>
+.RI [ script ]
+.sp
+.RE
+The
+.I script
+argument is optional.
+If omitted the script will look for a file called
+.I \&.rdeliver
+in the home directory.
+.PP
+Options are:
+.TP
+.BI \-\-load\-path " directory"
+Prepend the given
+.I directory
+to ruby's load path.
+.TP
+.BI \-\-log " filename"
+Log to the given
+.IR filename .
+If no log is specified, no logging occurs.
+.TP
+.BI \-\-home " directory"
+Specify the home directory.
+.B rdeliver
+will change to this
+.I directory
+before reading and writing any files.
+The home directory defaults to the value of the 
+.B HOME
+or
+.B LOGDIR
+environment variable.
+.SH DELIVERY SCRIPT
+.PP
+The delivery script runs in the context of a class called
+.B Deliver
+(in contrast, most ruby scripts run in the context of the
+.B Object
+class).  So any methods added with 
+.B def
+will be added to the
+.B Deliver
+class.
+.PP
+A minimal delivery script would be:
+.RS
+.sp
+ def main
+   agent\&.save('inbox')
+ end
+.sp
+.RE
+This code defines a
+.B Deliver#main
+method that saves the mail into an mbox style mailbox.
+.PP
+The only API the
+.B Deliver
+script has is the
+.B #agent
+method.  This retrieves the
+.B RFilter::DeliveryAgent
+object associated with the current message.
+Using the API of the
+.B RFilter::DeliveryAgent
+object, you can access and modify the message body and headers,
+defer or reject the message delivery,
+and deliver into various mailbox formats.
+.PP
+See also
+.B RFilter::DeliveryAgent
+and
+.BR Deliver .
+.SH INSTALLATION
+.PP
+Assuming you have the
+.B RubyMail
+mail classes installed, you typically have to put something like this in your
+.I .forward
+file:
+.RS
+.sp
+|"/usr/bin/rdeliver \-\-log /home/you/\&.rlog"
+.sp
+.RE
+This will call
+.B rdeliver
+for each new message you get, and log to
+.IR /home/you/\&.rlog .
+.SH "CATASTROPHIC ERRORS"
+The
+.B rdeliver
+script is very careful with errors.
+If there is any problem, it logs the error to the log file you specify.
+But if you do not specify a log file,
+or the error occurs before the log file is opened,
+a record of the error is placed in a file called
+.I CATASTROPHIC_DELIVERY_FAILURE
+in the home directory.
+If that fails, the error information is printed to the standard output
+in the hopes that it will be part of a bounce message.
+In all cases, the exit code 75 is returned,
+which tells the MTA to re\-try the delivery again.
+.SH AUTHOR
+.PP
+.B rdeliver
+and
+.B RFilter
+support classes were written by Matt Armstrong <matt@lickey.com>.
+.PP
+This document was originally an RD format document of
+.B rdeliver
+script.
+This manual page was converted from it for Debian GNU/Linux system.

@@ -1,0 +1,43 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>daemon (bin/experimental-filter.rb)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File bin/experimental-filter.rb, line 63</span>
+<span class="kw">def</span> daemon(nochdir, noclose)
+  pid = fork
+  <span class="kw">if</span> pid == -1
+    <span class="kw">return</span> -1
+  <span class="kw">elsif</span> pid != <span class="kw">nil</span>
+    exit 0
+  <span class="kw">end</span>
+
+  Process.setsid()
+
+  Dir.chdir(<span class="str">'/'</span>) <span class="kw">if</span> (nochdir == 0)
+  <span class="kw">if</span> noclose == 0
+    devnull = open(<span class="str">&quot;/dev/null&quot;</span>, <span class="str">&quot;r+&quot;</span>)
+    $stdin.reopen(devnull)
+    $stdout.reopen(devnull)
+    p = IO::pipe
+    pid = fork
+    <span class="kw">if</span> pid == -1
+      $stderr.reopen(devnull)
+    <span class="kw">elsif</span> pid == <span class="kw">nil</span>
+      p[1].close
+      STDIN.reopen(p[0])
+      p[0].close
+    <span class="kw">else</span>
+      p[0].close
+      $stderr.reopen(p[1])
+      p[1].close
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+  <span class="kw">return</span> 0
+<span class="kw">end</span></pre>
+</body>
+</html>

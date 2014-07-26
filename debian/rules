@@ -1,0 +1,94 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+#
+DOCDIR = $(CURDIR)/debian/rubyfilter-doc/usr/share/doc/rubyfilter-doc
+RUBY_VERSIONS = 1.8
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	for i in $(RUBY_VERSIONS); do \
+		mkdir build-tree-$$i; \
+		ruby$$i -Cbuild-tree-$$i ../install.rb config \
+			--rb-dir='$$std-ruby'; \
+	done
+	touch configure-stamp
+
+
+build: build-stamp
+
+build-stamp: configure
+	dh_testdir
+	for i in $(RUBY_VERSIONS); do \
+		mkdir build-tree-$$i; \
+		ruby$$i -Cbuild-tree-$$i ../install.rb setup; \
+	done
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+	rm -rf build-tree-*
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	for i in $(RUBY_VERSIONS); do \
+		mkdir build-tree-$$i; \
+		ruby$$i -Cbuild-tree-$$i ../install.rb install \
+			--prefix=$(CURDIR)/debian/librfilter-ruby$$i; \
+		mv $(CURDIR)/debian/librfilter-ruby$$i/usr/bin/rdeliver.rb \
+			$(CURDIR)/debian/rdeliver/usr/bin/rdeliver; \
+		rm -rf $(CURDIR)/debian/librfilter-ruby$$i/usr/bin; \
+	done
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+#	dh_installdebconf	
+	dh_installdocs -A NEWS README THANKS TODO
+	install -d $(DOCDIR)/html
+	(cd doc && tar -cf - .) | (cd $(DOCDIR)/html && tar -xf -)
+	dh_installexamples
+	install -d $(DOCDIR)/examples/bin $(DOCDIR)/examples/test
+	cp bin/* $(DOCDIR)/examples/bin
+	(cd test && tar -cf - .) | (cd $(DOCDIR)/examples/test && tar -xf -)
+	dh_installmenu
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_installinit
+	dh_installcron
+	dh_installman debian/rdeliver.1
+	dh_installinfo
+	dh_installchangelogs 
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_makeshlibs
+	dh_installdeb
+#	dh_perl
+#	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep
+.PHONY: build clean binary-indep binary-arch binary install configure

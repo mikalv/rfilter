@@ -1,0 +1,29 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>write_to_mbox (RFilter::Deliver)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/deliver.rb, line 115</span>
+    <span class="kw">def</span> write_to_mbox(output_io, message)
+      first = <span class="kw">true</span>
+      message.each { |line|
+        <span class="kw">if</span> first
+          first = <span class="kw">false</span>
+          <span class="kw">if</span> line !~ <span class="re">/^From .*\d$/</span>
+            from = <span class="str">&quot;From foo@bar  &quot;</span> + Time.now.asctime + <span class="str">&quot;\n&quot;</span>
+            output_io &lt;&lt; from
+          <span class="kw">end</span>
+        <span class="kw">elsif</span> line =~ <span class="re">/^From /</span>
+          output_io &lt;&lt; <span class="str">'&gt;'</span>
+        <span class="kw">end</span>
+        output_io &lt;&lt; line
+        output_io &lt;&lt; <span class="str">&quot;\n&quot;</span> <span class="kw">unless</span> line[-1] == ?\n
+      }
+      output_io &lt;&lt; <span class="str">&quot;\n&quot;</span>
+    <span class="kw">end</span></pre>
+</body>
+</html>

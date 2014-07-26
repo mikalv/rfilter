@@ -1,0 +1,40 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>process (RFilter::DeliveryAgent)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/delivery_agent.rb, line 309</span>
+      <span class="kw">def</span> process(input, logfile)
+        <span class="kw">begin</span>
+          lda = RFilter::DeliveryAgent.new(input, logfile)
+          <span class="kw">yield</span> lda
+          lda.defer(<span class="str">&quot;finished without a final delivery&quot;</span>)
+        <span class="kw">rescue</span> Exception =&gt; exception
+          <span class="kw">if</span> exception.class &lt;= DeliveryComplete
+            raise exception
+          <span class="kw">else</span>
+            <span class="kw">begin</span>
+              lda.log(0, <span class="str">&quot;uncaught exception: &quot;</span> + exception.inspect)
+              lda.log(0, <span class="str">&quot;uncaught exception backtrace:\n    &quot;</span> +
+                      exception.backtrace.join(<span class="str">&quot;\n    &quot;</span>))
+              lda.defer(<span class="str">&quot;uncaught exception&quot;</span>)
+            <span class="kw">rescue</span> Exception
+              <span class="kw">if</span> $!.class &lt;= DeliveryComplete
+                <span class="cmt"># The lda.defer above will generate this, just re-raise</span>
+                <span class="cmt"># the delivery status exception.</span>
+                raise
+              <span class="kw">else</span>
+                <span class="cmt"># Any errors logging in the uncaught exception and we</span>
+                <span class="cmt"># just re-raise the original exception</span>
+                raise exception
+              <span class="kw">end</span>
+            <span class="kw">end</span>
+          <span class="kw">end</span>
+        <span class="kw">end</span>
+      <span class="kw">end</span></pre>
+</body>
+</html>

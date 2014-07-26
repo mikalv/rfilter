@@ -1,0 +1,22 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>save (RFilter::DeliveryAgent)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/delivery_agent.rb, line 140</span>
+    <span class="kw">def</span> save(folder, continue = <span class="kw">false</span>)
+      log(2, &quot;Action: save to #{folder.inspect}&quot;)
+      retval = <span class="kw">if</span> folder =~ <span class="re">%{(.*[^/])/$}</span>
+                 deliver_maildir($1, @message)
+               <span class="kw">else</span>
+                 deliver_mbox(folder, @message)
+               <span class="kw">end</span>
+      raise DeliverySuccess, &quot;saved to mbox #{folder.inspect}&quot; <span class="kw">unless</span> continue
+      retval
+    <span class="kw">end</span></pre>
+</body>
+</html>

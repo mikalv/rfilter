@@ -1,0 +1,27 @@
+rubyfilter (0.12-2) unstable; urgency=low
+
+  * Drop Ruby1.6 support. Closes: #337102.
+  * Remove debian/docs. Closes: #337989.
+
+ -- YAEGASHI Takeshi <yaegashi@debian.org>  Mon, 19 Dec 2005 03:04:54 +0900
+
+rubyfilter (0.12-1) unstable; urgency=low
+
+  * New upstream release.
+  * Split package for Ruby1.6, Ruby1.8, docs, rdeliver utility.
+  * Uploaded, closes: Bug#209404.
+
+ -- YAEGASHI Takeshi <yaegashi@debian.org>  Mon, 22 Mar 2004 21:35:29 +0900
+
+rubyfilter (0.10-0.2) unstable; urgency=low
+
+  * debian/rdeliver.1: Manual page converted from rdeliver.
+
+ -- YAEGASHI Takeshi <yaegashi@debian.org>  Wed, 10 Sep 2003 03:24:43 +0900
+
+rubyfilter (0.10-0.1) unstable; urgency=low
+
+  * Experimental release.
+
+ -- YAEGASHI Takeshi <yaegashi@debian.org>  Thu, 28 Aug 2003 23:36:35 +0900
+

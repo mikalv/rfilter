@@ -1,0 +1,26 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>new (RFilter::DeliveryAgent)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/delivery_agent.rb, line 110</span>
+    <span class="kw">def</span> initialize(input, logfile)
+      @logfile =
+        <span class="kw">if</span> logfile.nil?
+          <span class="kw">nil</span>
+        <span class="kw">else</span>
+          File.open(logfile, File::CREAT|File::APPEND|File::WRONLY, 0600)
+        <span class="kw">end</span>
+      @message = <span class="kw">if</span> input.is_a?(RMail::Message)
+                   input
+                 <span class="kw">else</span>
+                   RMail::Parser.new.parse(input)
+                 <span class="kw">end</span>
+      @logging_level = 2
+    <span class="kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,75 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>deliver_maildir (RFilter::Deliver)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File lib/rfilter/deliver.rb, line 233</span>
+    <span class="kw">def</span> deliver_maildir(dir, message)
+      require <span class="str">'socket'</span>
+
+      <span class="cmt"># First, make the required directories</span>
+      new = File.join(dir, <span class="str">'new'</span>)
+      tmp = File.join(dir, <span class="str">'tmp'</span>)
+      [ dir, new, tmp, File.join(dir, <span class="str">'cur'</span>) ].each { |d|
+        <span class="kw">begin</span>
+          Dir.mkdir(d, 0700)
+        <span class="kw">rescue</span> Errno::EEXIST
+          raise <span class="kw">unless</span> FileTest::directory?(d)
+        <span class="kw">end</span>
+      }
+
+      sequence = @@mail_deliver_maildir_count
+      @@mail_deliver_maildir_count = @@mail_deliver_maildir_count.next
+      tmp_name = <span class="kw">nil</span>
+      new_name = <span class="kw">nil</span>
+      hostname = Socket::gethostname.gsub(<span class="re">/[^\w]/</span>, <span class="str">'_'</span>).untaint
+      pid = Process::pid
+      3.times { |i|
+        now = Time::now
+        name = sprintf(<span class="str">&quot;%d.M%XP%dQ%d.%s&quot;</span>,
+                       Time::now.tv_sec, Time::now.tv_usec,
+                       pid, sequence, hostname)
+        tmp_name = File.join(tmp, name)
+        new_name = File.join(new, name)
+        <span class="kw">begin</span>
+          File::stat(tmp_name)
+        <span class="kw">rescue</span> Errno::ENOENT
+          <span class="kw">break</span>
+        <span class="kw">rescue</span> Exception
+          raise <span class="kw">if</span> i == 2
+        <span class="kw">end</span>
+        raise <span class="str">&quot;Too many tmp file conflicts.&quot;</span> <span class="kw">if</span> i == 2
+        sleep(2)
+      }
+
+      <span class="kw">begin</span>
+        File.open(tmp_name,
+                  File::CREAT|File::EXCL|File::WRONLY|SYNC_IF_NO_FSYNC,
+                  0600) { |f|
+          <span class="cmt"># Write the message to the file</span>
+          first = <span class="kw">true</span>
+          message.each { |line|
+            <span class="kw">if</span> first
+              first = <span class="kw">false</span>
+              <span class="kw">next</span> <span class="kw">if</span> line =~ <span class="re">/From /</span>
+            <span class="kw">end</span>
+            f &lt;&lt; line
+            f &lt;&lt; <span class="str">&quot;\n&quot;</span> <span class="kw">unless</span> line[-1] == ?\n
+          }
+          f.fsync <span class="kw">if</span> <span class="kw">defined?</span> f.fsync
+        }
+        File.link(tmp_name, new_name)
+      <span class="kw">ensure</span>
+        <span class="kw">begin</span>
+          File.delete(tmp_name)
+        <span class="kw">rescue</span> Errno::ENOENT
+        <span class="kw">end</span>
+      <span class="kw">end</span>
+      new_name
+    <span class="kw">end</span></pre>
+</body>
+</html>

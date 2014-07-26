@@ -1,0 +1,145 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: RFilter::AddressTagger</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel=StyleSheet href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript" language="JavaScript">
+  <!--
+  function popCode(url) {
+    window.open(url, "Code", 
+          "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  //-->
+  </script>
+</head>
+
+<body bgcolor="white">
+
+<table summary="Information on class" width="100%" border="0" cellspacing="0">
+ <tr class="title-row">
+ <td class="big-title-font">
+   <sup><font color="aqua">Class</font></sup> RFilter::AddressTagger
+ </td>
+ <td align="right">
+   <table summary="layout" cellspacing="0" cellpadding="2">
+     <tr valign="top">
+      <td class="small-title-font">In:</td>
+      <td class="small-title-font">
+        <a href="../../files/lib/rfilter/tagged_rb.html" class="aqua">
+lib/rfilter/tagged.rb
+         </a>
+<br />
+      </td>
+     </tr>
+     <tr>
+      <td class="small-title-font">Parent:</td>
+      <td class="small-title-font">
+Object
+      </td>
+     </tr>
+   </table>
+  </td>
+  </tr>
+</table>
+  <!-- banner header -->
+
+
+
+
+
+<table summary="Methods" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Methods</td></tr>
+</table>
+<div class="name-list">
+<a href="#M000051">dated</a>&nbsp; &nbsp;
+<a href="#M000052">keyword</a>&nbsp; &nbsp;
+<a href="#M000050">new</a>&nbsp; &nbsp;
+<a href="#M000053">verify</a>&nbsp; &nbsp;
+</div>
+
+
+<table summary="Attributes" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Attributes</td></tr>
+</table>
+<table summary="Attribute details" cellspacing="5">
+     <tr valign="top">
+       <td class="attr-name">delimiter</td>
+       <td align="center" class="attr-rw">&nbsp;[RW]&nbsp;</td>
+       <td></td>
+     </tr>
+     <tr valign="top">
+       <td class="attr-name">key</td>
+       <td align="center" class="attr-rw">&nbsp;[RW]&nbsp;</td>
+       <td></td>
+     </tr>
+     <tr valign="top">
+       <td class="attr-name">strength</td>
+       <td align="center" class="attr-rw">&nbsp;[RW]&nbsp;</td>
+       <td></td>
+     </tr>
+</table>
+
+
+
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Class methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000050"></a>
+<a href="AddressTagger.src/M000050.html" target="Code" class="methodtitle"
+ onClick="popCode('AddressTagger.src/M000050.html');return false;">
+<b>new</b>(key, delimiter, strength)
+</a>
+</td></tr>
+</table>
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Instance methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000051"></a>
+<a href="AddressTagger.src/M000051.html" target="Code" class="methodtitle"
+ onClick="popCode('AddressTagger.src/M000051.html');return false;">
+<b>dated</b>(address, expires)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+expires is the absolute time this dated address will expire. E.g. Time.now
++ (60 * 60 * 24 * age)
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000052"></a>
+<a href="AddressTagger.src/M000052.html" target="Code" class="methodtitle"
+ onClick="popCode('AddressTagger.src/M000052.html');return false;">
+<b>keyword</b>(address, keyword)
+</a>
+</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000053"></a>
+<a href="AddressTagger.src/M000053.html" target="Code" class="methodtitle"
+ onClick="popCode('AddressTagger.src/M000053.html');return false;">
+<b>verify</b>(address)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Returns true if an address verifies. I.e. that the text portion of the tag
+matches its HMAC. Throws an ArgumentError if the address isn&#8217;t tagged
+at all.
+</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>record_string_in_db (bin/rsendmail.rb)</title>
+<link rel=StyleSheet href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body bgcolor="white">
+<pre><span class="cmt"># File bin/rsendmail.rb, line 110</span>
+<span class="kw">def</span> record_string_in_db(db, address)
+  record = db[address]
+  count = record.split(<span class="re">/:/</span>)[1] <span class="kw">unless</span> record.nil?
+  count ||= <span class="str">'0'</span>
+  db[address] = Time.now.strftime(<span class="str">&quot;%Y%m%d&quot;</span>) + <span class="str">':'</span> + count.succ
+<span class="kw">end</span></pre>
+</body>
+</html>

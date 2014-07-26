@@ -1,0 +1,217 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: RFilter::Deliver</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel=StyleSheet href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript" language="JavaScript">
+  <!--
+  function popCode(url) {
+    window.open(url, "Code", 
+          "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  //-->
+  </script>
+</head>
+
+<body bgcolor="white">
+
+<table summary="Information on class" width="100%" border="0" cellspacing="0">
+ <tr class="title-row">
+ <td class="big-title-font">
+   <sup><font color="aqua">Module</font></sup> RFilter::Deliver
+ </td>
+ <td align="right">
+   <table summary="layout" cellspacing="0" cellpadding="2">
+     <tr valign="top">
+      <td class="small-title-font">In:</td>
+      <td class="small-title-font">
+        <a href="../../files/lib/rfilter/deliver_rb.html" class="aqua">
+lib/rfilter/deliver.rb
+         </a>
+<br />
+      </td>
+     </tr>
+   </table>
+  </td>
+  </tr>
+</table>
+  <!-- banner header -->
+
+
+
+<div class="description"><p>
+This is a module containing methods that know how deliver to various kinds
+of message folder types.
+</p>
+</div>
+
+
+<table summary="Methods" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Methods</td></tr>
+</table>
+<div class="name-list">
+<a href="#M000019">deliver_filter</a>&nbsp; &nbsp;
+<a href="#M000020">deliver_maildir</a>&nbsp; &nbsp;
+<a href="#M000016">deliver_mbox</a>&nbsp; &nbsp;
+<a href="#M000018">deliver_pipe</a>&nbsp; &nbsp;
+<a href="#M000017">write_to_mbox</a>&nbsp; &nbsp;
+</div>
+
+
+
+<table summary="List of classes" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Classes and Modules</td></tr>
+</table>
+<div class="classlist">
+Class <a href="Deliver/DeliveryError.html" class="link">RFilter::Deliver::DeliveryError</a><br />
+Class <a href="Deliver/LockingError.html" class="link">RFilter::Deliver::LockingError</a><br />
+Class <a href="Deliver/NotAFile.html" class="link">RFilter::Deliver::NotAFile</a><br />
+Class <a href="Deliver/NotAMailbox.html" class="link">RFilter::Deliver::NotAMailbox</a><br />
+
+</div>
+
+
+<table summary="Method list" cellpadding="5" width="100%">
+<tr><td class="tablesubtitle">Public Instance methods</td></tr>
+</table>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000016"></a>
+<a href="Deliver.src/M000016.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000016.html');return false;">
+<b>deliver_mbox</b>(filename, message)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+<a href="Deliver.html">Deliver</a> <tt>message</tt> to an mbox
+<tt>filename</tt>.
+</p>
+<p>
+The <tt>each</tt> method on <tt>message</tt> is used to get each line of
+the message. If the first line of the message is not an mbox <tt>From_</tt>
+header, a fake one will be generated.
+</p>
+<p>
+The file named by <tt>filename</tt> is opened for append, and
+<tt>flock</tt> locking is used to prevent other processes from modifying
+the file during delivery. No &quot;.lock&quot; style locking is performed.
+If that is desired, it should be performed before calling this method.
+</p>
+<p>
+Returns the name of the file delivered to, or raises an exception if
+delivery failed.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000017"></a>
+<a href="Deliver.src/M000017.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000017.html');return false;">
+<b>write_to_mbox</b>(output_io, message)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Write to an already opened mbox file. This low level function just takes
+care of escaping From_ lines in the message. See <a
+href="Deliver.html#M000016">deliver_mbox</a> for a more robust version.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000018"></a>
+<a href="Deliver.src/M000018.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000018.html');return false;">
+<b>deliver_pipe</b>(command, message)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+<a href="Deliver.html">Deliver</a> <tt>message</tt> to a pipe.
+</p>
+<p>
+The supplied <tt>command</tt> is run in a sub process, and
+<tt>message.each</tt> is used to get each line of the message and write it
+to the pipe.
+</p>
+<p>
+This method captures the <tt>Errno::EPIPE</tt> and ignores it, since this
+exception can be generated when the command exits before the entire message
+is written to it (which may or may not be an error).
+</p>
+<p>
+The caller can (and should!) examine <tt>$?</tt> to see the exit status of
+the pipe command.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000019"></a>
+<a href="Deliver.src/M000019.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000019.html');return false;">
+<b>deliver_filter</b>(message, *command) {|from_r| ...}
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+<a href="Deliver.html">Deliver</a> <tt>message</tt> to a filter and provide
+the io stream for reading the filtered content to the supplied block.
+</p>
+<p>
+The supplied <tt>command</tt> is run in a sub process, and
+<tt>message.each</tt> is used to get each line of the message and write it
+to the filter.
+</p>
+<p>
+The block passed to the function is run with IO objects for the stdout of
+the child process.
+</p>
+<p>
+Returns the exit status of the child process.
+</p>
+</div>
+<table summary="method"  width="100%" cellspacing="0" cellpadding="5" border="0">
+<tr><td class="methodtitle">
+<a name="M000020"></a>
+<a href="Deliver.src/M000020.html" target="Code" class="methodtitle"
+ onClick="popCode('Deliver.src/M000020.html');return false;">
+<b>deliver_maildir</b>(dir, message)
+</a>
+</td></tr>
+</table>
+<div class="description">
+<p>
+Delivery <tt>message</tt> to a Maildir.
+</p>
+<p>
+See <a
+href="http://cr.yp.to/proto/maildir.html">cr.yp.to/proto/maildir.html</a>
+for a description of the maildir mailbox format. Its primary advantage is
+that it requires no locks &#8212; delivery and access to the mailbox can
+occur at the same time.
+</p>
+<p>
+The <tt>each</tt> method on <tt>message</tt> is used to get each line of
+the message. If the first line of the message is an mbox <tt>From_</tt>
+line, it is discarded.
+</p>
+<p>
+The filename of the successfully delivered message is returned. Will raise
+exceptions on any kind of error.
+</p>
+<p>
+This method will attempt to create the Maildir if it does not exist.
+</p>
+</div>
+
+</body>
+</html>
